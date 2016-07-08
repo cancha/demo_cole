@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Colegio_Jean.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,18 +13,22 @@ namespace Colegio_Jean.Controllers
         {
             return View();
         }
-
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult Login(PersonalModel objPersonalModel)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            Boolean logueado = string.IsNullOrEmpty((string)Session["usuario"]) ? objPersonalModel.autenticar() : false;
+            
+            if (logueado)
+            {
+                Session["usuario"] = objPersonalModel;
+                return Index();
+            }
+            ViewBag.mensajeError = "Usuario o Contraseña Incorrectos";
+            return Login();
         }
-
-        public ActionResult Contact()
+        [HttpGet]
+        public ActionResult Login()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
